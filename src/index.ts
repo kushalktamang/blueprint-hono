@@ -1,9 +1,10 @@
 import { serve } from "@hono/node-server";
 
 import env from "./config/env-config.js";
+import logger from "./config/logger.js";
 import server from "./server.js";
 
-const port = Math.trunc(Number(env.PORT));
+const { PORT: port } = env;
 
 serve(
   {
@@ -11,7 +12,6 @@ serve(
     port,
   },
   (info) => {
-    // oxlint-disable-next-line no-console
-    console.log(`Server is running on http://localhost:${info.port}`);
+    logger.info(`Server is running on http://localhost:${info.port}`);
   },
 );

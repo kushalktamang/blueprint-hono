@@ -1,10 +1,16 @@
 import winston from "winston";
 
-const log_level = "info";
-const { combine, timestamp, errors, colorize, json, simple } = winston.format;
+import env from "./env-config.js";
 
-const log = winston.createLogger({
-  level: log_level,
+const { combine, timestamp, errors, colorize, json, simple } = winston.format;
+const log_level = "info";
+const isProduction = env.NODE_ENV === "production";
+
+const fileOrConsole = (filename: string) =>
+  isProduction ? new winston.transports.Console() : new winston.transports.File({ filename });
+
+const logger = winston.createLogger({
+  level: env.LOG_LEVEL ?? log_level,
   format: combine(
     timestamp({ format: "YYYY-MM-DD hh:mm:ss.SSS A" }),
     errors({ stack: true }),
@@ -12,19 +18,28 @@ const log = winston.createLogger({
   ),
   defaultMeta: { service: "blueprint-hono" },
   transports: [
-    new winston.transports.File({ filename: "logs/combined.log" }),
-    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+    new winston.transports.Console({
+      format: isProduction ? undefined : combine(colorize(), errors({ stack: true }), simple()),
+    }),
+    ...(isProduction
+      ? []
+      : [
+          new winston.transports.File({
+            filename: "logs/combined.log",
+            maxsize: 5_000_000,
+            maxFiles: 3,
+          }),
+          new winston.transports.File({
+            filename: "logs/error.log",
+            level: "error",
+            maxsize: 5_000_000,
+            maxFiles: 3,
+          }),
+        ]),
   ],
-  exceptionHandlers: [new winston.transports.File({ filename: "logs/exception.log" })],
-  rejectionHandlers: [new winston.transports.File({ filename: "logs/rejections.log" })],
+  exceptionHandlers: [fileOrConsole("logs/exception.log")],
+  rejectionHandlers: [fileOrConsole("logs/rejections.log")],
+  exitOnError: true,
 });
 
-log.add(
-  process.env.NODE_ENV === "production"
-    ? new winston.transports.Console()
-    : new winston.transports.Console({
-        format: combine(colorize(), simple()),
-      }),
-);
-
-export default log;
+export default logger;

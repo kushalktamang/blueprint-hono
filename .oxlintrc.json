@@ -18,6 +18,7 @@
     "typescript/no-unnecessary-type-arguments": "off",
     "typescript/no-unsafe-type-assertion": "off",
     "curly": "error",
+    "node/no-process-env": "error",
 
     "import/no-unassigned-import": [
       "warn",

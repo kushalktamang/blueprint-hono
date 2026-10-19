@@ -1,10 +1,12 @@
 import type { ErrorHandler } from "hono";
 import type { NotFoundHandler } from "hono";
+import { HTTPException } from "hono/http-exception";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { INTERNAL_SERVER_ERROR, OK, NOT_FOUND } from "../../assets/status-code/http-status-code.js";
+import { INTERNAL_SERVER_ERROR, NOT_FOUND } from "../../assets/status-code/http-status-code.js";
 import { NOT_FOUND as NOT_FOUND_MESSAGE } from "../../assets/status-code/http-status-phrases.js";
 import env from "../../config/env-config.js";
+import logger from "../../config/logger.js";
 
 const notFound: NotFoundHandler = (c) => {
   return c.json(
@@ -15,28 +17,25 @@ const notFound: NotFoundHandler = (c) => {
   );
 };
 
-const getErrorStatus = (err: Error) => {
-  if ("status" in err && typeof err.status === "number") {
-    return err.status;
-  }
-  return INTERNAL_SERVER_ERROR;
-};
-
 const onError: ErrorHandler = (err, c) => {
-  const currentStatus = getErrorStatus(err);
-  let statusCode: ContentfulStatusCode;
-  if (currentStatus === OK) {
-    statusCode = INTERNAL_SERVER_ERROR;
-  } else {
-    // eslint-disable-next-line typescript/no-unsafe-type-assertion -- Hono's status type is a closed literal union; runtime value is a valid HTTP code
-    statusCode = currentStatus as ContentfulStatusCode;
-  }
+  const status: ContentfulStatusCode =
+    err instanceof HTTPException ? err.status : INTERNAL_SERVER_ERROR;
+  const isServerError = status >= INTERNAL_SERVER_ERROR;
+  const isProduction = env.NODE_ENV === "production";
+
+  logger[isServerError ? "error" : "warn"](err.message, {
+    status,
+    method: c.req.method,
+    path: c.req.path,
+    stack: err.stack,
+  });
+
   return c.json(
     {
-      message: err.message,
-      stack: env.NODE_ENV === "production" ? undefined : err.stack,
+      message: isServerError && isProduction ? "Internal Server Error" : err.message,
+      stack: isProduction ? undefined : err.stack,
     },
-    statusCode,
+    status,
   );
 };
 
