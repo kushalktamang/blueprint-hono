@@ -1,0 +1,73 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
+  "plugins": ["typescript", "unicorn", "import", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "rules": {
+    "eslint/no-await-in-loop": "off",
+    "no-console": ["error", { "allow": ["error"] }],
+    "no-shadow": "off",
+    "typescript/no-unnecessary-boolean-literal-compare": "off",
+    "typescript/no-unnecessary-type-arguments": "off",
+    "typescript/no-unsafe-type-assertion": "off",
+    "curly": "error",
+
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css", "**/*.scss", "**/*.less"]
+      }
+    ],
+    "import/no-cycle": "error",
+    "import/no-nodejs-modules": "off",
+    "eqeqeq": "error",
+    "prefer-arrow-callback": "error",
+    "prefer-template": "error",
+    "typescript/prefer-readonly-parameter-types": "off",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-deprecated": "warn",
+    "typescript/restrict-plus-operands": [
+      "error",
+      {
+        "allowAny": false,
+        "allowBoolean": false,
+        "allowNullish": false,
+        "allowNumberAndString": false,
+        "allowRegExp": false
+      }
+    ],
+
+    "typescript/restrict-template-expressions": "error",
+    "typescript/strict-boolean-expressions": [
+      "error",
+      {
+        "allowNumber": false,
+        "allowString": false,
+        "allowNullableObject": false
+      }
+    ],
+
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error",
+    "typescript/prefer-for-of": "warn",
+    "typescript/no-unnecessary-type-assertion": "warn",
+    "typescript/consistent-type-imports": "warn"
+  },
+  "ignorePatterns": ["dist", "build", ".next", "node_modules"]
+}
