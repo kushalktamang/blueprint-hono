@@ -3,9 +3,9 @@ import type { NotFoundHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { INTERNAL_SERVER_ERROR, NOT_FOUND } from "../../assets/status-code/http-status-code.js";
-import { NOT_FOUND as NOT_FOUND_MESSAGE } from "../../assets/status-code/http-status-phrases.js";
-import env from "../../config/env-config.js";
+import { INTERNAL_SERVER_ERROR, NOT_FOUND } from "../../assets/status-code/httpStatusCode.js";
+import { NOT_FOUND as NOT_FOUND_MESSAGE } from "../../assets/status-code/httpStatusPhrases.js";
+import env from "../../config/envConfig.js";
 import logger from "../../config/logger.js";
 
 const notFound: NotFoundHandler = (c) => {

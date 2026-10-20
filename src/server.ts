@@ -1,20 +1,15 @@
-import { HTTPException } from "hono/http-exception";
-
-import env from "./config/env-config.js";
-import createServer from "./lib/create-server.js";
+import index from "../src/routes/indexRoute.js";
+import createServer from "./lib/createServer.js";
+import OpenApiDocument from "./openapi/document.js";
 
 const server = createServer();
 
-server.get("/", (c) => {
-  c.var.logger.info("buleprint hono is working fine");
-  return c.text("Blueprint Hono");
-});
+const routes = [index];
 
-if (env.NODE_ENV !== "production") {
-  server.get("/error", (c) => {
-    c.var.logger.debug("only show error when debug level is enabled");
-    throw new HTTPException(422, { message: "its an error" });
-  });
-}
+OpenApiDocument(server);
+
+routes.forEach((r) => {
+  server.route("/", r);
+});
 
 export default server;

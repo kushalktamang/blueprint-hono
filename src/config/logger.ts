@@ -1,6 +1,6 @@
 import winston from "winston";
 
-import env from "./env-config.js";
+import env from "./envConfig.js";
 
 const { combine, timestamp, errors, colorize, json, simple } = winston.format;
 const log_level = "info";

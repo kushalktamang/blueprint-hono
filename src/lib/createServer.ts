@@ -3,12 +3,18 @@ import { requestId } from "hono/request-id";
 
 import logger from "../config/logger.js";
 import { notFound, onError } from "../middlewares/errors/errors.js";
-import type { AppBindings } from "./types.js";
+import defaultHook from "../openapi/defaultHook.js";
+import type { ServerBindings } from "../types/types.js";
+
+export function createRouter() {
+  return new OpenAPIHono<ServerBindings>({
+    strict: false,
+    defaultHook,
+  });
+}
 
 function createServer() {
-  const server = new OpenAPIHono<AppBindings>({
-    strict: false,
-  });
+  const server = createRouter();
 
   server.use("*", requestId());
   server.use("*", async (c, next) => {
