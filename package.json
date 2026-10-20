@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "fmt": "oxfmt",
     "lint:fix": "oxlint --fix",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.3",
