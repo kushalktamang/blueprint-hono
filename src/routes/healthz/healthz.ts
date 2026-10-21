@@ -10,6 +10,7 @@ const router = createRouter().openapi(
     tags: ["Health"],
     method: "get",
     path: "/healthz",
+    summary: "Health Check",
     responses: {
       [HttpStatusCode.OK]: jsonContent(createMessageObjectSchema("OK"), "Health Check"),
     },

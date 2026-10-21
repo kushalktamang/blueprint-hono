@@ -22,3 +22,5 @@ export const insertUserSchema = createInsertSchema(users, {
   createdAt: true,
   updatedAt: true,
 });
+
+export const patchUserSchema = insertUserSchema.partial();

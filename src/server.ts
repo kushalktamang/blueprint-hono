@@ -6,7 +6,7 @@ import users from "./routes/users/index.js";
 
 const server = createServer();
 
-const routes = [index, health, users];
+const routes = [index, health, users] as const;
 
 OpenApiDocument(server);
 

@@ -10,6 +10,7 @@ const router = createRouter().openapi(
     tags: ["Index"],
     method: "get",
     path: "/",
+    summary: "Index",
     responses: {
       [HttpStatusCode.OK]: jsonContent(
         createMessageObjectSchema("Hono Api"),

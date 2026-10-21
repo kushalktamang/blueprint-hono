@@ -13,8 +13,12 @@ function OpenApiDocument(server: ServerOpenAPI) {
   });
 
   server.get(
-    "/scalar",
-    Scalar({ url: "/docs", defaultHttpClient: { targetKey: "node", clientKey: "fetch" } }),
+    "/reference",
+    Scalar({
+      layout: "modern",
+      url: "/docs",
+      defaultHttpClient: { targetKey: "node", clientKey: "fetch" },
+    }),
   );
 }
 
