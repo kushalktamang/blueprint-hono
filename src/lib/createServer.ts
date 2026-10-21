@@ -4,7 +4,7 @@ import { requestId } from "hono/request-id";
 import logger from "../config/logger.js";
 import { notFound, onError } from "../middlewares/errors/errors.js";
 import defaultHook from "../openapi/defaultHook.js";
-import type { ServerBindings } from "../types/types.js";
+import type { ServerBindings, ServerOpenAPI } from "../types/types.js";
 
 export function createRouter() {
   return new OpenAPIHono<ServerBindings>({
@@ -37,5 +37,11 @@ function createServer() {
   server.onError(onError);
 
   return server;
+}
+
+export function createTestServer(router: ServerOpenAPI) {
+  const testServer = createServer();
+  testServer.route("/", router);
+  return testServer;
 }
 export default createServer;

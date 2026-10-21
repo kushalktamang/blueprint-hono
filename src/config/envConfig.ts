@@ -16,7 +16,9 @@ if (process.env.NODE_ENV !== "production") {
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "staging", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().min(1).max(65535).default(8081),
-  LOG_LEVEL: z.enum(["error", "warn", "info", "http", "verbose", "debug", "silly"]).default("info"),
+  LOG_LEVEL: z
+    .enum(["error", "warn", "info", "http", "verbose", "debug", "silly", "silent"])
+    .default("info"),
   DATABASE_URL: z.url(),
 });
 
