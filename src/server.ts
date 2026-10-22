@@ -14,4 +14,6 @@ routes.forEach((r) => {
   server.route("/", r);
 });
 
+export type ServerType = (typeof routes)[number];
+
 export default server;
